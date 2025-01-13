@@ -20,7 +20,7 @@ public class SubscriptionController {
     @FXML
     private TableColumn<Subscription, Integer> colId;
     @FXML
-    private TableColumn<Subscription, Integer> colCustomerId;
+    private TableColumn<Subscription, String> colCustomerName; // Nama pelanggan
     @FXML
     private TableColumn<Subscription, String> colPlanName;
     @FXML
@@ -31,15 +31,15 @@ public class SubscriptionController {
     private TableColumn<Subscription, String> colEndDate;
 
     @FXML
-    private ComboBox<Integer> customerIdField; // Changed to ComboBox for customer selection
+    private ComboBox<String> customerIdField; // Nama pelanggan di ComboBox
     @FXML
-    private ComboBox<String> planNameField; // Changed to ComboBox for plan selection
+    private ComboBox<String> planNameField; // Paket langganan
     @FXML
-    private TextField priceField; // Keeping TextField for numeric input
+    private TextField priceField; // Harga
     @FXML
-    private DatePicker startDateField; // Changed to DatePicker for date selection
+    private DatePicker startDateField; // Tanggal mulai
     @FXML
-    private DatePicker endDateField; // Changed to DatePicker for date selection
+    private DatePicker endDateField; // Tanggal berakhir
 
     @FXML
     private Button addButton;
@@ -49,34 +49,36 @@ public class SubscriptionController {
     private Button deleteButton;
 
     private ObservableList<Subscription> subscriptionList = FXCollections.observableArrayList();
-
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colPlanName.setCellValueFactory(new PropertyValueFactory<>("planName"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         colStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         colEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
 
         loadSubscriptions();
-        loadCustomerIds(); // Load customer IDs for ComboBox
-        loadPlanNames();    // Load plan names for ComboBox
+        loadCustomerNames(); // Load nama pelanggan
+        loadPlanNames();     // Load nama paket langganan
     }
 
     private void loadSubscriptions() {
         subscriptionList.clear();
         try (Connection conn = DBHelper.getConnection()) {
-            String sql = "SELECT * FROM subscriptions";
+            String sql = "SELECT s.subscription_id, c.name AS customer_name, " +
+                         "s.plan_name, s.price, s.start_date, s.end_date " +
+                         "FROM subscriptions s " +
+                         "JOIN customers c ON s.customer_id = c.customer_id";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 subscriptionList.add(new Subscription(
                         rs.getInt("subscription_id"),
-                        rs.getInt("customer_id"),
+                        rs.getString("customer_name"), // Ambil nama pelanggan
                         rs.getString("plan_name"),
                         rs.getDouble("price"),
                         rs.getString("start_date"),
@@ -89,16 +91,16 @@ public class SubscriptionController {
         subscriptionTable.setItems(subscriptionList);
     }
 
-    private void loadCustomerIds() {
+    private void loadCustomerNames() {
         try (Connection conn = DBHelper.getConnection()) {
-            String sql = "SELECT customer_id FROM customers";
+            String sql = "SELECT name FROM customers";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
-            ObservableList<Integer> customerIds = FXCollections.observableArrayList();
+            ObservableList<String> customerNames = FXCollections.observableArrayList();
             while (rs.next()) {
-                customerIds.add(rs.getInt("customer_id"));
+                customerNames.add(rs.getString("name"));
             }
-            customerIdField.setItems(customerIds);
+            customerIdField.setItems(customerNames);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,16 +113,17 @@ public class SubscriptionController {
 
     @FXML
     private void addSubscription() {
-        Integer customerId = customerIdField.getValue();
+        String customerName = customerIdField.getValue();
         String planName = planNameField.getValue();
         double price = Double.parseDouble(priceField.getText());
         String startDate = (startDateField.getValue() != null) ? startDateField.getValue().format(DATE_FORMATTER) : null;
         String endDate = (endDateField.getValue() != null) ? endDateField.getValue().format(DATE_FORMATTER) : null;
 
         try (Connection conn = DBHelper.getConnection()) {
-            String sql = "INSERT INTO subscriptions (customer_id, plan_name, price, start_date, end_date) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO subscriptions (customer_id, plan_name, price, start_date, end_date) " +
+                         "VALUES ((SELECT customer_id FROM customers WHERE name = ?), ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, customerId);
+            stmt.setString(1, customerName);
             stmt.setString(2, planName);
             stmt.setDouble(3, price);
             stmt.setString(4, startDate);
@@ -141,9 +144,10 @@ public class SubscriptionController {
         }
 
         try (Connection conn = DBHelper.getConnection()) {
-            String sql = "UPDATE subscriptions SET customer_id = ?, plan_name = ?, price = ?, start_date = ?, end_date = ? WHERE subscription_id = ?";
+            String sql = "UPDATE subscriptions SET customer_id = (SELECT customer_id FROM customers WHERE name = ?), " +
+                         "plan_name = ?, price = ?, start_date = ?, end_date = ? WHERE subscription_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, customerIdField.getValue());
+            stmt.setString(1, customerIdField.getValue());
             stmt.setString(2, planNameField.getValue());
             stmt.setDouble(3, Double.parseDouble(priceField.getText()));
             stmt.setString(4, startDateField.getValue().format(DATE_FORMATTER));

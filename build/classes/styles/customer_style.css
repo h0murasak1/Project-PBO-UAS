@@ -13,7 +13,7 @@
 
 .styled-table .column-header,
 .styled-table .table-cell {
-  -fx-text-fill: white;
+  -fx-text-fill: black;
   -fx-font-size: 14px;
   -fx-alignment: CENTER_LEFT;
 }

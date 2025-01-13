@@ -13,7 +13,7 @@
       <VBox prefHeight="569.0" prefWidth="960.0" spacing="2.0">
          <children>
              <!-- Navbar -->
-               <HBox prefHeight="71.0" prefWidth="952.0" spacing="20.0">
+               <HBox prefHeight="71.0" prefWidth="960.0" spacing="20.0">
                    <Label layoutX="36.0" layoutY="22.0" style="-fx-font-size: 20;" text="SDG Wifi Subscriptions" textFill="WHITE">
                   <HBox.margin>
                      <Insets right="200.0" top="15.0" />
@@ -42,7 +42,7 @@
                </padding>
                </HBox>
                <!-- Dnamic Content Area -->
-            <StackPane fx:id="contentPane" prefHeight="492.0" prefWidth="960.0" style="-fx-background-color: white; -fx-background-radius: 0 0 15 15;">
+            <StackPane fx:id="contentPane" prefHeight="498.0" prefWidth="960.0" style="-fx-background-color: white; -fx-background-radius: 0 0 15 15;">
              
          </StackPane>
          </children>
