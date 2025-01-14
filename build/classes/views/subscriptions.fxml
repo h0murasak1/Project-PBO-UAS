@@ -25,11 +25,11 @@
       </TableView>
 
       <!-- Form Fields with Styling -->
-      <ComboBox fx:id="customerIdField" layoutX="674.0" layoutY="57.0" prefHeight="26.0" prefWidth="221.0" styleClass="styled-combobox" />
-      <ComboBox fx:id="planNameField" layoutX="674.0" layoutY="120.0" prefHeight="26.0" prefWidth="221.0" styleClass="styled-combobox" />
-      <TextField fx:id="priceField" layoutX="674.0" layoutY="181.0" prefHeight="26.0" prefWidth="221.0" styleClass="styled-textfield" />
-      <DatePicker fx:id="startDateField" layoutX="674.0" layoutY="242.0" prefHeight="26.0" prefWidth="221.0" styleClass="styled-datepicker" />
-      <DatePicker fx:id="endDateField" layoutX="674.0" layoutY="302.0" prefHeight="26.0" prefWidth="221.0" styleClass="styled-datepicker" />
+      <ComboBox fx:id="customerIdField" layoutX="674.0" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="styled-combobox" />
+      <ComboBox fx:id="planNameField" layoutX="674.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="styled-combobox" />
+      <TextField fx:id="priceField" layoutX="674.0" layoutY="181.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="styled-textfield" />
+      <DatePicker fx:id="startDateField" layoutX="674.0" layoutY="242.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="styled-datepicker" />
+      <DatePicker fx:id="endDateField" layoutX="674.0" layoutY="302.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="221.0" styleClass="styled-datepicker" />
       <Label layoutX="675.0" layoutY="34.0" style="-fx-font-size: 15; -fx-font-weight: bold;" text="Select Customer" />
       <Label layoutX="674.0" layoutY="98.0" style="-fx-font-size: 15; -fx-font-weight: bold;" text="Select Plan" />
       <Label layoutX="674.0" layoutY="160.0" style="-fx-font-size: 15; -fx-font-weight: bold;" text="Price" />
