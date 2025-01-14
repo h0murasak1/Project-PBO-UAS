@@ -4,6 +4,7 @@ import database.DBHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.CustomPasswordField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import main.App;
@@ -16,7 +17,7 @@ public class LoginController {
     @FXML
     private CustomTextField usernameField;
     @FXML
-    private CustomTextField passwordField;
+    private CustomPasswordField passwordField;
     @FXML
     private Button loginButton;
     @FXML
